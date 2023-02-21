@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-  Image,
-  FlatList,
-  ScrollView
-} from "react-native";
+import { Text, View, StyleSheet, Pressable, Image, FlatList, ScrollView } from "react-native";
 
 const CryptoWalletStats = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -15,55 +7,47 @@ const CryptoWalletStats = () => {
   const [nftList, setNftList] = useState([]);
   const [selectedNFTs, setSelectedNFTs] = useState([]);
   useEffect(() => {
-    setNftList([
-      {
-        id: 1,
-        user: "Username",
-        lastBid: "0.98 ETH",
-        time: "04:25:23",
-        image: require("./assets/image.png"),
-        title: "NFT nulla mi quis hendrerit urna nunc",
-        selected: false
-      },
-      {
-        id: 2,
-        user: "Username",
-        lastBid: "0.98 ETH",
-        time: "04:25:23",
-        image: require("./assets/image.png"),
-        title: "NFT nulla mi quis hendrerit urna nunc",
-        selected: true
-      }
-    ]);
+    setNftList([{
+      id: 1,
+      user: "Username",
+      lastBid: "0.98 ETH",
+      time: "04:25:23",
+      image: require("./assets/image.png"),
+      title: "NFT nulla mi quis hendrerit urna nunc",
+      selected: false
+    }, {
+      id: 2,
+      user: "Username",
+      lastBid: "0.98 ETH",
+      time: "04:25:23",
+      image: require("./assets/image.png"),
+      title: "NFT nulla mi quis hendrerit urna nunc",
+      selected: true
+    }]);
     setDetails({
       currentToken: 1256,
       earning: 1555,
       spent: 500
     });
   }, []);
+
   const handleNFTSelect = day => {
     const newSelectedNFTs = [...selectedNFTs];
+
     if (newSelectedNFTs.includes(day)) {
       newSelectedNFTs.splice(newSelectedNFTs.indexOf(day), 1);
     } else {
       newSelectedNFTs.push(day);
     }
+
     setSelectedNFTs(newSelectedNFTs);
   };
-  return (
-    <View style={styles.container}>
+
+  return <View style={styles.container}>
       <ScrollView>
         <View style={styles.flexRow}>
-          <TabView
-            tabTitles={["Stake", "Sell", "Buy"]}
-            selected={selectedTab}
-            onPress={setSelectedTab}
-            style={styles.tabView}
-          />
-          <Image
-            source={require("./assets/cryptoIcon.png")}
-            style={styles.cryptoIcon}
-          />
+          <TabView tabTitles={["Stake", "Sell", "Buy"]} selected={selectedTab} onPress={setSelectedTab} style={styles.tabView} />
+          <Image source={require("./assets/cryptoIcon.png")} style={styles.cryptoIcon} />
         </View>
         <Text style={styles.heading}>Statistics</Text>
         <View style={styles.circularProgressBar}>
@@ -89,24 +73,14 @@ const CryptoWalletStats = () => {
           </View>
         </View>
         <Text style={styles.listHeading}>NFT list</Text>
-        <FlatList
-          data={nftList}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <NFT
-              item={item}
-              selected={selectedNFTs.includes(item)}
-              onPress={x => handleNFTSelect(x)}
-            />
-          )}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
+        <FlatList data={nftList} keyExtractor={item => item.id.toString()} renderItem={({
+        item
+      }) => <NFT item={item} selected={selectedNFTs.includes(item)} onPress={x => handleNFTSelect(x)} />} horizontal={true} showsHorizontalScrollIndicator={false} />
         <Button buttonText={"Bond NFT"} style={styles.button} />
       </ScrollView>
-    </View>
-  );
+    </View>;
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -195,8 +169,8 @@ const styles = StyleSheet.create({
     marginVertical: 10
   }
 });
-
 export default CryptoWalletStats;
+
 const TabView = ({
   tabTitles,
   selected,
@@ -213,40 +187,12 @@ const TabView = ({
     backgroundColor: backgroundColor || "#F1F1F1"
   };
   const propStyle = style || {};
-  return (
-    <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
-      {tabTitles.map((title, index) => (
-        <Pressable
-          onPress={() => (onPress ? onPress(index) : null)}
-          style={
-            index === selected
-              ? [tabViewStyles.selected, tabColorStyle, tabViewStyles.tabItem]
-              : [
-                  tabViewStyles.unSelected,
-                  backgroundColorStyle,
-                  tabViewStyles.tabItem
-                ]
-          }
-          key={index}>
-          {icons
-            ? (
-            <Image
-              source={icons[index]}
-              style={[
-                tabViewStyles.icon,
-                index === selected
-                  ? tabViewStyles.selectedIcon
-                  : tabViewStyles.unSelectedIcon
-              ]}
-            />
-              )
-            : null}
+  return <View style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      {tabTitles.map((title, index) => <Pressable onPress={() => onPress ? onPress(index) : null} style={index === selected ? [tabViewStyles.selected, tabColorStyle, tabViewStyles.tabItem] : [tabViewStyles.unSelected, backgroundColorStyle, tabViewStyles.tabItem]} key={index}>
+          {icons ? <Image source={icons[index]} style={[tabViewStyles.icon, index === selected ? tabViewStyles.selectedIcon : tabViewStyles.unSelectedIcon]} /> : null}
           <Text>{title}</Text>
-        </Pressable>
-      ))}
-    </View>
-  );
+        </Pressable>)}
+    </View>;
 };
 
 const tabViewStyles = StyleSheet.create({
@@ -296,18 +242,23 @@ const tabViewStyles = StyleSheet.create({
 
 const format = (value, currency, precesion) => {
   const parts = value && value.toFixed(precesion).toString().split(".");
+
   if (parts) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
     switch (currency) {
       case "USD":
         return "$ " + parts.join(".");
+
       case "ETH":
         return parts.join(".") + " ETH";
+
       default:
         return parts.join(".");
     }
   }
 };
+
 const Button = params => {
   const backgroundColor = params.backgroundColor || "#000";
   const textColor = params.textColor || "#fff";
@@ -319,20 +270,16 @@ const Button = params => {
   const btnText = {
     color: textColor
   };
-  return (
-    <View style={[buttonStyles.btnContainer, params.style]}>
+  return <View style={[buttonStyles.btnContainer, params.style]}>
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
-        <Pressable
-          style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+        <Pressable style={[buttonStyles.btn, btnStyle]} onPress={params.onPress}>
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
           <View style={styles.childrenContainer}>{params.children}</View>
         </Pressable>
       </View>
-    </View>
-  );
+    </View>;
 };
 
 const buttonStyles = StyleSheet.create({
@@ -358,7 +305,6 @@ const buttonStyles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-
     flexDirection: "row"
   },
   btnText: {
@@ -372,16 +318,15 @@ const buttonStyles = StyleSheet.create({
   }
 });
 
-const NFT = ({ item, selected, onPress }) => {
-  return (
-    <View style={nftStyles.container}>
+const NFT = ({
+  item,
+  selected,
+  onPress
+}) => {
+  return <View style={nftStyles.container}>
       <View style={nftStyles.imageContainer}>
         <Image source={item.image} />
-        <Checkbox
-          value={selected}
-          setValue={() => onPress(item)}
-          style={nftStyles.checkbox}
-        />
+        <Checkbox value={selected} setValue={() => onPress(item)} style={nftStyles.checkbox} />
         <Text style={nftStyles.timePill}>{item.time}</Text>
       </View>
       <Text style={nftStyles.title}>{item.title}</Text>
@@ -405,8 +350,7 @@ const NFT = ({ item, selected, onPress }) => {
           <Button buttonText={"Place a bid"} />
         </View>
       </View>
-    </View>
-  );
+    </View>;
 };
 
 const nftStyles = StyleSheet.create({
@@ -505,22 +449,11 @@ const nftStyles = StyleSheet.create({
 });
 
 const Checkbox = props => {
-  return (
-    <Pressable
-      onPress={() => {
-        props.setValue(!props.value);
-      }}
-      style={[checkboxStyles.container, props.style]}>
-      <Image
-        source={
-          props.value
-            ? require("./assets/checkboxIconActive.png")
-            : require("./assets/checkboxIcon.png")
-        }
-        style={[checkboxStyles.checkbox]}
-      />
-    </Pressable>
-  );
+  return <Pressable onPress={() => {
+    props.setValue(!props.value);
+  }} style={[checkboxStyles.container, props.style]}>
+      <Image source={props.value ? require("./assets/checkboxIconActive.png") : require("./assets/checkboxIcon.png")} style={[checkboxStyles.checkbox]} />
+    </Pressable>;
 };
 
 const checkboxStyles = StyleSheet.create({
